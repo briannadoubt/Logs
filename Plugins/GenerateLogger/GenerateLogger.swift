@@ -23,9 +23,27 @@ struct GenerateLogger: BuildToolPlugin {
                 displayName: "Generating Logger in \(target.moduleName)",
                 executable: try context.tool(named: "LoggerGenerator").path,
                 arguments: [ "\(outputPath)", target.name, context.package.displayName ],
-                inputFiles: [],
                 outputFiles: [ outputPath ]
             )
         ]
     }
 }
+
+#if canImport(XcodeProjectPlugin)
+import XcodeProjectPlugin
+
+extension GenerateLogger: XcodeBuildToolPlugin {
+    /// This entry point is called when operating on an Xcode project.
+    func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [PackagePlugin.Command] {
+        let outputPath = context.pluginWorkDirectory.appending("Logger.swift")
+        return [
+            .buildCommand(
+                displayName: "Generating Logger in \(target.displayName)",
+                executable: try context.tool(named: "LoggerGenerator").path,
+                arguments: [ "\(outputPath)", target.displayName, context.xcodeProject.displayName ],
+                outputFiles: [ outputPath ]
+            )
+        ]
+    }
+}
+#endif

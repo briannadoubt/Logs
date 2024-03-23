@@ -1,21 +1,19 @@
 import Foundation
-
-
 import Logs
 
-@HasLogger
+@Logging
 struct Cat {
     func meow() {
-        logger.log("Meow")
+        Self.logger.log("Meow")
     }
 }
 
 /// The equivilent implementation to Cat above without macros
 struct NotCat {
     func meow() {
-        logger.log("Meow")
+        Self.logger.log("Meow")
     }
-    private let logger = Logger(
+    private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier ?? UUID().uuidString,
         category: String(describing: Self.self)
     )

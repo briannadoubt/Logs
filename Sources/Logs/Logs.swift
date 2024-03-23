@@ -10,4 +10,4 @@
 ///
 /// produces a tuple `(x + y, "x + y")`.
 @attached(member, names: named(logger))
-public macro HasLogger() = #externalMacro(module: "LogsMacros", type: "HasLoggerMacro")
+public macro Logging() = #externalMacro(module: "LogsMacros", type: "LoggingMacro")

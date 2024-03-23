@@ -18,11 +18,11 @@ final class LogsTests: XCTestCase {
         #if canImport(LogsMacros)
         assertMacroExpansion(
             """
-            @HasLogger struct Cat {}
+            @Logging struct Cat {}
             """,
             expandedSource: """
-            @HasLogger struct Cat {
-                private let logger = Logger(
+            @Logging struct Cat {
+                private static let logger = Logger(
                     category: String(
                         describing: Self.self
                     )

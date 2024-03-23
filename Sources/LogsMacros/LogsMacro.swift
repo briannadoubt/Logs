@@ -5,31 +5,32 @@ import SwiftSyntaxMacros
 
 /// Adds a module-specific logger to your object
 ///
-///     @HasLogger struct Cat {}
+///     @Logging struct Cat {}
 ///
 ///  will expand to
 ///
-///     @HasLogger struct Cat {
-///         private let logger = Logger(
+///     @Logging struct Cat {
+///         private static let logger = Logger(
 ///             category: String(
 ///                 describing: Self.self
 ///             )
 ///         )
 ///     }
-public struct HasLoggerMacro: MemberMacro {
+public struct LoggingMacro: MemberMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
         conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
+        guard let name = declaration.as(StructDeclSyntax.self)?.name ?? declaration.as(ClassDeclSyntax.self)?.name ?? declaration.as(ActorDeclSyntax.self)?.name ?? declaration.as(EnumDeclSyntax.self)?.name else {
+            throw LoggingMacroExpansionError.failedToExpandTypeDeclarationName
+        }
         return [
             DeclSyntax(
                 """
-                private let logger = Logger(
-                    category: String(
-                        describing: Self.self
-                    )
+                private static let logger = os.Logger(
+                    category: String(describing: \(name.trimmed).self)
                 )
                 """
             )
@@ -40,6 +41,10 @@ public struct HasLoggerMacro: MemberMacro {
 @main
 struct LogsPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        HasLoggerMacro.self,
+        LoggingMacro.self,
     ]
+}
+
+enum LoggingMacroExpansionError: Error {
+    case failedToExpandTypeDeclarationName
 }

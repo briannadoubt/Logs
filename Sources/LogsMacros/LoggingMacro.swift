@@ -29,9 +29,7 @@ public struct LoggingMacro: MemberMacro {
         return [
             DeclSyntax(
                 """
-                private static let logger = os.Logger(
-                    category: String(describing: \(name.trimmed).self)
-                )
+                private static let logger = os.Logger(category: String(describing: \(name.trimmed).self))
                 """
             )
         ]

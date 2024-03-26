@@ -15,10 +15,12 @@ struct LoggerGenerator: AsyncParsableCommand {
     }) var outputDirectory: URL
 
     @Argument var moduleName: String
+
     @Argument var defaultSubsystem: String
 
     func run() async throws {
         let loggerFile = """
+        ///  
         ///  Logger.swift
         ///  \(moduleName)
         ///
@@ -30,7 +32,7 @@ struct LoggerGenerator: AsyncParsableCommand {
         extension Logger {
             init(category: String) {
                 self.init(
-                    subsystem: Bundle.main.bundleIdentifier ?? "\(defaultSubsystem)",
+                    subsystem: (Bundle.main.bundleIdentifier ?? "App") + ":\(defaultSubsystem)",
                     category: "\(moduleName):\\(category)"
                 )
             }

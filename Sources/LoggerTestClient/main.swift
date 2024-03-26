@@ -13,7 +13,7 @@ struct NotCat {
     func meow() {
         Self.logger.log("Meow")
     }
-    private static let logger = Logger(
+    private static let logger = os.Logger(
         subsystem: Bundle.main.bundleIdentifier ?? UUID().uuidString,
         category: String(describing: Self.self)
     )

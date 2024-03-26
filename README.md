@@ -25,7 +25,7 @@ let package = Package(
 let package = Package(
     // ...
     dependencies: [
-        .package(name: "Logs", url: "https://github.com/briannadoubt/Logs"),
+        .package(name: "Logs", url: "https://github.com/rewardStyle/Logs"),
     ],
     // ...
 )
